@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/JubelShaji/CI-CD-project.git'
+                    url: 'https://github.com/JubelShaji/CI-CD-Project_with_Kubernets--Kind.git'
             }
         }
 
@@ -70,8 +70,8 @@ pipeline {
                         sed -i 's|jubelshaji/jenkin-kind:backend-latest|${DOCKER_REGISTRY}/jenkin-kind:backend-${IMAGE_TAG}|g' kind/backend-deployment.yaml
                         sed -i 's|jubelshaji/jenkin-kind:frontend-latest|${DOCKER_REGISTRY}/jenkin-kind:frontend-${IMAGE_TAG}|g' kind/frontend-deployment.yaml
 
-                        scp -o StrictHostKeyChecking=no kind/backend-deployment.yaml ${REMOTE_HOST}:backend-deployment.yaml
-                        scp -o StrictHostKeyChecking=no kind/frontend-deployment.yaml ${REMOTE_HOST}:frontend-deployment.yaml
+                        scp -o StrictHostKeyChecking=no kind/backend-deployment.yaml ${REMOTE_HOST}:mernapp/backend-deployment.yaml
+                        scp -o StrictHostKeyChecking=no kind/frontend-deployment.yaml ${REMOTE_HOST}:mernapp/frontend-deployment.yaml
                      """
                 }
             }
@@ -80,7 +80,7 @@ pipeline {
             steps {
                 sshagent (credentials: ['ssh-credential']) {
                      sh """
-                        ssh -o StrictHostKeyChecking=no ${REMOTE_HOST} 'kubectl apply -f kind/'
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_HOST} 'sudo kubectl apply -f mernapp/'
                      """
                 }
             }
